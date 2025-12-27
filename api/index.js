@@ -6,17 +6,25 @@ const cors = require('cors');
 const app = express();
 app.use(cors());
 
-// ENDPOINT 1: Mencari lagu (Search)
-// Contoh: /api/search?q=noah+menghapus-jejakmu
 app.get('/api/search', async (req, res) => {
-    const query = req.query.q;
-    if (!query) return res.status(400).json({ error: 'Query search (q) diperlukan' });
-
     try {
-        const r = await yts(query);
-        const videos = r.videos.slice(0, 10); // Ambil 10 hasil teratas
+        const query = req.query.q;
         
-        const results = videos.map(v => ({
+        // Cek jika query kosong
+        if (!query) {
+            return res.status(400).json({ error: 'Mana keyword-nya, bang?' });
+        }
+
+        console.log('Searching for:', query); // Muncul di log Vercel
+
+        const r = await yts(query);
+        
+        // Cek jika r.videos ada dan tidak kosong
+        if (!r || !r.videos || r.videos.length === 0) {
+            return res.json({ message: 'Gak ketemu apa-apa, coba keyword lain', results: [] });
+        }
+
+        const results = r.videos.slice(0, 10).map(v => ({
             id: v.videoId,
             url: v.url,
             title: v.title,
@@ -27,29 +35,21 @@ app.get('/api/search', async (req, res) => {
 
         res.json(results);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        console.error('Error Search:', err);
+        res.status(500).json({ error: 'Server error nih: ' + err.message });
     }
 });
 
-// ENDPOINT 2: Stream MP3 (Putar)
-// Contoh: /api/stream?id=VIDEO_ID
+// Endpoint Stream tetap sama
 app.get('/api/stream', async (req, res) => {
     const videoId = req.query.id;
-    if (!videoId) return res.status(400).send('ID Video diperlukan');
-
+    if (!videoId) return res.status(400).send('Mana ID-nya?');
     const url = `https://www.youtube.com/watch?v=${videoId}`;
-
     try {
         res.setHeader('Content-Type', 'audio/mpeg');
-        
-        // Filter hanya audio dengan kualitas terbaik
-        ytdl(url, { 
-            filter: 'audioonly', 
-            quality: 'highestaudio' 
-        }).pipe(res);
-        
+        ytdl(url, { filter: 'audioonly', quality: 'highestaudio' }).pipe(res);
     } catch (err) {
-        res.status(500).send('Gagal memutar audio: ' + err.message);
+        res.status(500).send(err.message);
     }
 });
 
