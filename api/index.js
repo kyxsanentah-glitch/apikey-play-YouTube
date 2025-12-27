@@ -47,7 +47,11 @@ app.get('/api/stream', async (req, res) => {
     const url = `https://www.youtube.com/watch?v=${videoId}`;
     try {
         res.setHeader('Content-Type', 'audio/mpeg');
-        ytdl(url, { filter: 'audioonly', quality: 'highestaudio' }).pipe(res);
+ytdl(url, { 
+    filter: 'audioonly', 
+    quality: 'lowestaudio', 
+    highWaterMark: 1 << 25  
+}).pipe(res);
     } catch (err) {
         res.status(500).send(err.message);
     }
