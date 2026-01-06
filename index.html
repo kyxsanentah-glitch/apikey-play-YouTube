@@ -3,109 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NontonKuy - Streaming Pro</title>
+    <title>NontonKuy - Premium</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap');
         
-        body { background-color: #141414; color: white; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        body { background-color: #0f0f0f; color: #e5e5e5; font-family: 'Outfit', sans-serif; overflow-x: hidden; }
+        
         .hide-scroll::-webkit-scrollbar { display: none; }
         .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
-        .movie-card { transition: transform 0.3s; cursor: pointer; }
-        .movie-card:hover { transform: scale(1.1); z-index: 50; }
-        .nav-gradient { background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, transparent 100%); }
-        .hero-gradient { background: linear-gradient(to top, #141414 5%, transparent 100%); }
+        
+        /* Smooth Scale Effect */
+        .movie-card { transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); cursor: pointer; }
+        .movie-card:hover { transform: scale(1.05) translateY(-5px); z-index: 20; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        
+        .nav-gradient { background: linear-gradient(180deg, rgba(0,0,0,0.9) 0%, transparent 100%); }
+        .hero-gradient { background: linear-gradient(0deg, #0f0f0f 5%, rgba(15,15,15,0.8) 20%, transparent 100%); }
+        
         .shimmer { animation: shimmer 2s infinite linear; background: linear-gradient(to right, #1f1f1f 4%, #2e2e2e 25%, #1f1f1f 36%); background-size: 1000px 100%; }
         @keyframes shimmer { 0% { background-position: -1000px 0; } 100% { background-position: 1000px 0; } }
+
+        /* Genre Pill Style */
+        .genre-pill { border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(5px); transition: 0.3s; }
+        .genre-pill:hover { background: white; color: black; border-color: white; transform: scale(1.05); }
     </style>
 </head>
 <body>
 
-    <nav id="navbar" class="fixed top-0 w-full z-50 px-4 md:px-12 py-4 transition-all duration-300 nav-gradient flex justify-between items-center">
-        <div class="text-3xl font-black text-red-600 tracking-tighter cursor-pointer" onclick="location.reload()">NONTON<span class="text-white">KUY</span></div>
-        <div class="flex gap-4 items-center">
-            <form onsubmit="event.preventDefault(); searchMovie()" class="relative flex items-center">
+    <nav id="navbar" class="fixed top-0 w-full z-50 px-6 md:px-12 py-5 transition-all duration-300 nav-gradient flex justify-between items-center">
+        <div class="flex items-center gap-1 cursor-pointer" onclick="location.reload()">
+            <i class="fa-solid fa-play-circle text-red-600 text-3xl shadow-lg"></i>
+            <span class="text-2xl font-black tracking-tighter">NONTON<span class="text-red-600">KUY</span></span>
+        </div>
+        
+        <div class="flex gap-5 items-center">
+            <form onsubmit="event.preventDefault(); searchMovie()" class="relative flex items-center group">
                 <input type="text" id="search" placeholder="Cari film..." 
-                    class="bg-black/50 border border-white/30 text-white px-4 py-1.5 rounded-full focus:outline-none focus:border-red-600 transition w-32 md:w-64">
-                <button type="submit" class="absolute right-3 text-white"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    class="bg-black/40 border border-white/10 text-white px-4 py-2 rounded-full focus:outline-none focus:border-red-600 focus:bg-black/80 transition-all w-32 focus:w-64 md:w-64 backdrop-blur-sm placeholder-gray-500 text-sm">
+                <button type="submit" class="absolute right-4 text-gray-400 group-focus-within:text-white"><i class="fa-solid fa-magnifying-glass"></i></button>
             </form>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png" class="w-8 h-8 rounded cursor-pointer hidden md:block">
         </div>
     </nav>
 
-    <header id="hero" class="relative h-[85vh] w-full bg-cover bg-center flex items-center pl-4 md:pl-16 shimmer">
-        <div class="absolute inset-0 bg-black/40"></div>
+    <header id="hero" class="relative h-[90vh] w-full bg-cover bg-center flex items-center pl-6 md:pl-16 shimmer group">
+        <div class="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition duration-700"></div>
         <div class="absolute inset-0 hero-gradient"></div>
         
-        <div class="relative z-10 max-w-2xl pt-24 opacity-0 transition-opacity duration-1000" id="hero-content">
-            <h1 id="hero-title" class="text-4xl md:text-7xl font-black mb-4 drop-shadow-2xl leading-tight">...</h1>
-            <div class="flex items-center gap-4 mb-4 text-sm font-bold text-gray-300">
-                <span class="text-green-400" id="hero-rating">Rating</span>
-                <span>|</span>
-                <span id="hero-date">Tahun</span>
+        <div class="relative z-10 max-w-3xl pt-24 opacity-0 transition-opacity duration-1000 translate-y-4 transition-transform" id="hero-content">
+            <div class="flex gap-2 mb-4">
+                <span class="bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded tracking-wider">PREMIUM</span>
+                <span class="bg-white/20 backdrop-blur-md border border-white/20 text-white text-[10px] font-bold px-2 py-1 rounded tracking-wider">4K ULTRA HD</span>
             </div>
-            <p id="hero-desc" class="text-lg text-gray-200 mb-8 line-clamp-3 max-w-xl">...</p>
+
+            <h1 id="hero-title" class="text-5xl md:text-8xl font-black mb-6 drop-shadow-2xl leading-[0.9] text-transparent bg-clip-text bg-gradient-to-br from-white to-gray-400">Loading...</h1>
+            
+            <div class="flex items-center gap-6 mb-8 text-sm font-medium text-gray-300">
+                <div class="flex items-center gap-2 text-yellow-400">
+                    <i class="fa-solid fa-star"></i>
+                    <span id="hero-rating" class="text-white text-lg font-bold">0.0</span>
+                </div>
+                <span id="hero-date" class="text-gray-400">2024</span>
+                <span class="px-2 py-0.5 border border-gray-600 rounded text-xs">SUB INDO</span>
+            </div>
+
+            <p id="hero-desc" class="text-lg text-gray-300 mb-10 line-clamp-3 max-w-xl leading-relaxed font-light">Sedang mengambil data terbaru...</p>
+            
             <div class="flex gap-4">
-                <button onclick="playHero()" class="bg-white text-black px-8 py-3 rounded font-bold hover:bg-gray-200 transition flex items-center gap-3 text-lg">
-                    <i class="fa-solid fa-play"></i> Putar
+                <button onclick="playHero()" class="bg-red-600 text-white px-8 py-4 rounded-xl font-bold hover:bg-red-700 transition flex items-center gap-3 text-lg shadow-[0_0_20px_rgba(220,38,38,0.4)] hover:shadow-[0_0_30px_rgba(220,38,38,0.6)]">
+                    <i class="fa-solid fa-play"></i> PUTAR SEKARANG
                 </button>
-                <button onclick="infoHero()" class="bg-gray-600/80 text-white px-8 py-3 rounded font-bold hover:bg-gray-600/60 transition flex items-center gap-3 text-lg backdrop-blur-sm">
-                    <i class="fa-solid fa-circle-info"></i> Info
+                <button onclick="infoHero()" class="bg-white/10 border border-white/20 text-white px-8 py-4 rounded-xl font-bold hover:bg-white/20 transition flex items-center gap-3 text-lg backdrop-blur-md">
+                    <i class="fa-solid fa-circle-info"></i> INFO
                 </button>
             </div>
         </div>
     </header>
 
-    <main class="pl-4 md:pl-16 pb-24 -mt-24 relative z-20 space-y-12">
-        <div id="search-section" class="hidden pt-10">
-            <div class="flex justify-between items-end mb-4 pr-4 md:pr-16">
-                <h2 class="text-2xl font-bold text-white">Hasil Pencarian</h2>
-                <button onclick="closeSearch()" class="text-red-500 font-bold hover:underline">Tutup X</button>
+    <div class="px-6 md:px-16 -mt-10 relative z-20 mb-12 flex gap-3 overflow-x-auto hide-scroll pb-2">
+        <button class="genre-pill px-6 py-2 rounded-full text-sm font-semibold whitespace-nowrap">🔥 Trending</button>
+        <button class="genre-pill px-6 py-2 rounded-full text-sm font-semibold whitespace-nowrap">🎬 Action</button>
+        <button class="genre-pill px-6 py-2 rounded-full text-sm font-semibold whitespace-nowrap">👻 Horror</button>
+        <button class="genre-pill px-6 py-2 rounded-full text-sm font-semibold whitespace-nowrap">😂 Comedy</button>
+        <button class="genre-pill px-6 py-2 rounded-full text-sm font-semibold whitespace-nowrap">🎌 Anime</button>
+        <button class="genre-pill px-6 py-2 rounded-full text-sm font-semibold whitespace-nowrap">💑 Drama</button>
+    </div>
+
+    <main class="pl-6 md:pl-16 pb-24 relative z-20 space-y-16">
+        <div id="search-section" class="hidden pt-4">
+            <div class="flex justify-between items-end mb-6 pr-6 md:pr-16">
+                <h2 class="text-3xl font-bold text-white border-l-4 border-red-600 pl-4">Hasil Pencarian</h2>
+                <button onclick="closeSearch()" class="text-gray-400 hover:text-white transition"><i class="fa-solid fa-times-circle text-2xl"></i></button>
             </div>
-            <div id="search-grid" class="grid grid-cols-2 md:grid-cols-5 lg:grid-cols-6 gap-4 pr-4 md:pr-16"></div>
+            <div id="search-grid" class="grid grid-cols-2 md:grid-cols-5 lg:grid-cols-6 gap-6 pr-6 md:pr-16"></div>
         </div>
 
         <div class="group relative">
-            <h2 class="text-xl font-bold mb-4 text-white group-hover:text-red-500 transition">Sedang Tayang di Bioskop 🔥</h2>
-            <div id="now-playing" class="flex gap-4 overflow-x-auto hide-scroll pr-4 md:pr-16 py-4 scroll-smooth"></div>
+            <div class="flex items-center justify-between pr-6 md:pr-16 mb-6">
+                <h2 class="text-2xl md:text-3xl font-bold text-white flex items-center gap-3">
+                    <span class="w-1 h-8 bg-red-600 rounded-full"></span>
+                    Sedang Tayang
+                </h2>
+                <span class="text-xs font-bold text-red-600 border border-red-600 px-2 py-1 rounded">LIVE</span>
+            </div>
+            <div id="now-playing" class="flex gap-5 overflow-x-auto hide-scroll pr-6 md:pr-16 pb-10 scroll-smooth"></div>
         </div>
 
         <div class="group relative">
-            <h2 class="text-xl font-bold mb-4 text-white group-hover:text-red-500 transition">Paling Populer 🌍</h2>
-            <div id="popular" class="flex gap-4 overflow-x-auto hide-scroll pr-4 md:pr-16 py-4 scroll-smooth"></div>
+            <h2 class="text-2xl md:text-3xl font-bold text-white flex items-center gap-3 mb-6">
+                <span class="w-1 h-8 bg-blue-500 rounded-full"></span>
+                Paling Populer
+            </h2>
+            <div id="popular" class="flex gap-5 overflow-x-auto hide-scroll pr-6 md:pr-16 pb-10 scroll-smooth"></div>
         </div>
     </main>
 
-    <div id="movie-modal" class="fixed inset-0 bg-black/95 z-[60] hidden flex justify-center items-center p-0 md:p-4 backdrop-blur-sm">
-        <div class="bg-[#181818] rounded-none md:rounded-xl w-full max-w-7xl overflow-hidden shadow-2xl relative flex flex-col md:flex-row h-full md:h-[85vh] border border-gray-800" id="modal-container">
+    <footer class="bg-black/50 border-t border-white/5 py-16 mt-10">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl font-black tracking-tighter mb-6 text-gray-700">NONTON<span class="text-gray-600">KUY</span></h2>
             
-            <button onclick="closeModal()" class="absolute top-4 right-4 z-50 bg-black/50 text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-red-600 transition">
-                <i class="fa-solid fa-xmark text-xl"></i>
+            <div class="flex justify-center gap-8 mb-8 text-2xl text-gray-500">
+                
+                <a href="https://t.me/Kyxsancs" target="_blank" class="hover:text-blue-400 transition transform hover:scale-110">
+                    <i class="fa-brands fa-telegram"></i>
+                </a>
+
+                <a href="https://www.tiktok.com/@official_kyxzantzy" target="_blank" class="hover:text-[#ff0050] transition transform hover:scale-110">
+                    <i class="fa-brands fa-tiktok"></i>
+                </a>
+
+                <a href="https://t.me/kyxzanstoreofc" target="_blank" class="hover:text-pink-600 transition transform hover:scale-110">
+                    <i class="fa fa-film" aria-hidden="true"></i>
+                </a>
+
+                <a href="https://t.me/murfuncfree" target="_blank" class="hover:text-white transition transform hover:scale-110">
+                    <i class="fa fa-heart"></i>
+                </a>
+            </div>
+
+            <p class="text-gray-600 text-sm">© 2026 NontonKuy KyxzanTzy. Dibuat untuk kemudahan dalam menonton,By KyxzanTzy.</p>
+        </div>
+    </footer>
+
+    <div id="movie-modal" class="fixed inset-0 bg-black/95 z-[60] hidden flex justify-center items-center p-0 md:p-6 backdrop-blur-xl transition-all duration-500">
+        <div class="bg-[#121212] rounded-none md:rounded-2xl w-full max-w-[90rem] overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] relative flex flex-col md:flex-row h-full md:h-[90vh] border border-white/5" id="modal-container">
+            
+            <button onclick="closeModal()" class="absolute top-5 right-5 z-50 bg-black/40 text-white w-12 h-12 rounded-full flex items-center justify-center hover:bg-red-600 transition border border-white/10 backdrop-blur-md group">
+                <i class="fa-solid fa-xmark text-xl group-hover:rotate-90 transition duration-300"></i>
             </button>
             
-            <div id="video-section" class="w-full md:w-3/4 bg-black relative flex items-center justify-center h-[40vh] md:h-full transition-all duration-500">
-                <img id="modal-img" class="w-full h-full object-cover opacity-60" src="">
+            <div id="video-section" class="w-full md:w-[75%] bg-black relative flex items-center justify-center h-[40vh] md:h-full transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]">
+                <img id="modal-img" class="w-full h-full object-cover opacity-50 blur-sm transition duration-700" src="">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#121212] via-transparent to-transparent"></div>
+                
                 <iframe id="video-frame" class="absolute inset-0 w-full h-full hidden z-20" frameborder="0" allowfullscreen></iframe>
-                <button id="play-overlay" onclick="playMovie()" class="absolute z-10 bg-red-600 text-white w-20 h-20 rounded-full flex items-center justify-center hover:scale-110 transition shadow-xl">
-                    <i class="fa-solid fa-play text-3xl ml-1"></i>
+                
+                <button id="play-overlay" onclick="playMovie()" class="absolute z-10 bg-white/10 backdrop-blur-sm border border-white/30 text-white w-24 h-24 rounded-full flex items-center justify-center hover:scale-110 hover:bg-red-600 hover:border-red-600 transition duration-300 shadow-2xl group">
+                    <i class="fa-solid fa-play text-4xl ml-2 group-hover:text-white"></i>
                 </button>
-                <div id="video-loader" class="hidden absolute z-30 animate-spin rounded-full h-12 w-12 border-t-2 border-red-500"></div>
+                
+                <div id="video-loader" class="hidden absolute z-30 animate-spin rounded-full h-16 w-16 border-t-4 border-red-600 border-white/20"></div>
             </div>
             
-            <div id="info-section" class="p-6 md:p-8 md:w-1/4 flex flex-col bg-[#181818] overflow-y-auto h-full border-l border-gray-800">
-                <h2 id="modal-title" class="text-2xl font-black mb-3">Title</h2>
-                <div class="flex gap-2 text-xs font-bold mb-6">
-                    <span id="modal-date" class="border border-gray-600 px-2 py-1 rounded text-gray-400">2024</span>
-                    <span id="modal-rating" class="text-green-400 border border-green-900 bg-green-900/20 px-2 py-1 rounded">9.0</span>
+            <div id="info-section" class="p-8 md:p-12 md:w-[25%] flex flex-col bg-[#121212] overflow-y-auto h-full border-l border-white/5 relative z-10">
+                <h2 id="modal-title" class="text-3xl md:text-4xl font-black mb-4 leading-none tracking-tight text-white/90">Title</h2>
+                
+                <div class="flex flex-wrap gap-3 mb-8">
+                    <span id="modal-date" class="bg-white/10 px-3 py-1 rounded text-xs font-bold text-gray-300">2024</span>
+                    <span id="modal-rating" class="bg-green-500/20 text-green-400 px-3 py-1 rounded text-xs font-bold border border-green-500/20">9.0</span>
+                    <span class="bg-red-600 text-white px-3 py-1 rounded text-xs font-bold">HD</span>
                 </div>
-                <p class="text-gray-400 text-xs font-bold mb-2">SINOPSIS</p>
-                <p id="modal-desc" class="text-gray-300 text-sm leading-relaxed mb-8 flex-1">...</p>
-                <button onclick="playMovie()" class="w-full bg-red-600 text-white font-bold py-3 rounded hover:bg-red-700 transition">TONTON SEKARANG</button>
+
+                <div class="space-y-6 flex-1">
+                    <div>
+                        <p class="text-gray-500 text-xs font-bold tracking-widest mb-2 uppercase">Sinopsis</p>
+                        <p id="modal-desc" class="text-gray-300 text-sm leading-relaxed font-light">...</p>
+                    </div>
+                </div>
+
+                <button onclick="playMovie()" class="w-full bg-red-600 text-white font-bold py-4 rounded-xl hover:bg-red-700 transition flex items-center justify-center gap-3 mt-8 shadow-lg hover:shadow-red-900/50">
+                    <i class="fa-solid fa-play"></i> TONTON FILM
+                </button>
             </div>
         </div>
     </div>
-
-<script src="app.js"></script>
-</body>
-</html>
