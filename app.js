@@ -9,11 +9,20 @@ const API_KEY = 'b61f53b81836bf0d0c6625e390f6005b';
             fetchMovies(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=id-ID`, 'popular', true);
         };
 
+        // --- DISCLAIMER LOGIC ---
+        function closeDisclaimer() {
+            const modal = document.getElementById('disclaimer-modal');
+            modal.style.opacity = '0'; // Fade out animation
+            setTimeout(() => {
+                modal.classList.add('hidden'); // Hilangkan element setelah fade out
+            }, 500);
+        }
+
         async function fetchMovies(url, elementId, isHero = false) {
             try {
                 const res = await fetch(url);
                 const data = await res.json();
-                if(isHero && data.results) setupHero(data.results[Math.floor(Math.random() * 5)]); // Random top 5
+                if(isHero && data.results) setupHero(data.results[Math.floor(Math.random() * 5)]); 
                 
                 const container = document.getElementById(elementId);
                 container.innerHTML = '';
@@ -88,7 +97,7 @@ const API_KEY = 'b61f53b81836bf0d0c6625e390f6005b';
             
             // Show Info & Resize Video
             document.getElementById('info-section').classList.remove('hidden');
-            document.getElementById('info-section').style.width = ''; // Reset CSS width
+            document.getElementById('info-section').style.width = ''; 
             document.getElementById('info-section').classList.add('md:w-[25%]');
             
             const vidSec = document.getElementById('video-section');
@@ -110,11 +119,11 @@ const API_KEY = 'b61f53b81836bf0d0c6625e390f6005b';
             document.getElementById('play-overlay').classList.add('hidden');
             
             // Theater Mode Animation
-            document.getElementById('info-section').classList.add('hidden'); // Hide info
+            document.getElementById('info-section').classList.add('hidden'); 
             
             const vidSec = document.getElementById('video-section');
             vidSec.classList.remove('md:w-[75%]');
-            vidSec.classList.add('w-full'); // Full width
+            vidSec.classList.add('w-full'); 
             
             document.getElementById('video-loader').classList.remove('hidden');
             
