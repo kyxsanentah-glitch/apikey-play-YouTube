@@ -4,16 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NontonKuy - Dracin Universe</title>
-    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap');
         
-        body { background-color: #0f0f0f; color: #e5e5e5; font-family: 'Outfit', sans-serif; overflow-x: hidden; opacity: 0; transition: opacity 0.5s ease-in-out; }
-        body.loaded { opacity: 1; }
-
+        body { background-color: #0f0f0f; color: #e5e5e5; font-family: 'Outfit', sans-serif; overflow-x: hidden; }
+        
         .hide-scroll::-webkit-scrollbar { display: none; }
         .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
         
@@ -30,10 +27,10 @@
         .genre-pill:hover { background: #db2777; color: white; border-color: #db2777; transform: scale(1.05); box-shadow: 0 0 15px rgba(219, 39, 119, 0.5); }
     </style>
 </head>
-<body onload="document.body.classList.add('loaded')">
+<body>
 
-    <div id="disclaimer-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-xl p-4 transition-all duration-500 hidden opacity-0">
-        <div class="bg-[#181818] border border-pink-500/30 rounded-2xl max-w-md w-full p-6 md:p-8 shadow-[0_0_50px_rgba(219,39,119,0.2)] relative overflow-hidden transform scale-95 transition-transform duration-300" id="modal-box">
+    <div id="disclaimer-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-xl p-4 transition-all duration-500 hidden">
+        <div class="bg-[#181818] border border-pink-500/30 rounded-2xl max-w-md w-full p-6 md:p-8 shadow-[0_0_50px_rgba(219,39,119,0.2)] relative overflow-hidden" id="modal-box">
             <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-pink-600 via-purple-600 to-indigo-600"></div>
             
             <div class="text-center mb-8 mt-4">
@@ -194,7 +191,6 @@
             </div>
         </div>
     </div>
-
     <script src="okep.js"></script>
 </body>
 </html>
