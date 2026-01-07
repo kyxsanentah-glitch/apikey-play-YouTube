@@ -5,6 +5,18 @@ const API_KEY = 'b61f53b81836bf0d0c6625e390f6005b';
         let heroMovieId = null;
 
         window.onload = () => {
+            // Cek apakah user sudah pernah close disclaimer?
+            if (!localStorage.getItem('seenDisclaimer')) {
+                const modal = document.getElementById('disclaimer-modal');
+                modal.classList.remove('hidden');
+                // Timeout dikit biar ada efek fade in
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    document.getElementById('modal-box').classList.remove('scale-95');
+                    document.getElementById('modal-box').classList.add('scale-100');
+                }, 100);
+            }
+
             fetchMovies(`https://api.themoviedb.org/3/movie/now_playing?api_key=${API_KEY}&language=id-ID&region=ID`, 'now-playing');
             fetchMovies(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=id-ID`, 'popular', true);
         };
@@ -12,9 +24,14 @@ const API_KEY = 'b61f53b81836bf0d0c6625e390f6005b';
         // --- DISCLAIMER LOGIC ---
         function closeDisclaimer() {
             const modal = document.getElementById('disclaimer-modal');
-            modal.style.opacity = '0'; // Fade out animation
+            modal.style.opacity = '0'; // Fade out
+            modal.querySelector('#modal-box').classList.add('scale-95'); // Scale down
+            
+            // Simpan ke memory browser biar gak muncul lagi kalau di-refresh
+            localStorage.setItem('seenDisclaimer', 'true');
+
             setTimeout(() => {
-                modal.classList.add('hidden'); // Hilangkan element setelah fade out
+                modal.classList.add('hidden');
             }, 500);
         }
 
@@ -38,7 +55,7 @@ const API_KEY = 'b61f53b81836bf0d0c6625e390f6005b';
                                 <div class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center shadow-lg mb-2 transform scale-0 group-hover:scale-100 transition duration-300 delay-100">
                                     <i class="fa-solid fa-play text-white ml-1"></i>
                                 </div>
-                                <span class="text-xs font-bold text-white bg-black/60 px-2 py-1 rounded backdrop-blur-sm">★ ${movie.vote_average.toFixed(1)}</span>
+                                <span class="text-xs font-bold text-white bg-black/60 px-2 py-1 rounded backdrop-blur-sm">&#9733; ${movie.vote_average.toFixed(1)}</span>
                             </div>
                             
                             <div class="absolute bottom-0 w-full p-3 bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-100 transition duration-300">
@@ -89,22 +106,18 @@ const API_KEY = 'b61f53b81836bf0d0c6625e390f6005b';
 
         function openModal(movie) {
             currentMovieId = movie.id;
-            // Reset Layout
             document.getElementById('video-frame').src = '';
             document.getElementById('video-frame').classList.add('hidden');
             document.getElementById('modal-img').classList.remove('hidden');
             document.getElementById('play-overlay').classList.remove('hidden');
             
-            // Show Info & Resize Video
             document.getElementById('info-section').classList.remove('hidden');
             document.getElementById('info-section').style.width = ''; 
             document.getElementById('info-section').classList.add('md:w-[25%]');
-            
             const vidSec = document.getElementById('video-section');
             vidSec.classList.remove('w-full');
             vidSec.classList.add('md:w-[75%]');
 
-            // Data
             document.getElementById('modal-img').src = BACKDROP_URL + (movie.backdrop_path || movie.poster_path);
             document.getElementById('modal-title').innerText = movie.title;
             document.getElementById('modal-desc').innerText = movie.overview || "Sinopsis tidak tersedia.";
@@ -117,16 +130,11 @@ const API_KEY = 'b61f53b81836bf0d0c6625e390f6005b';
         function playMovie() {
             document.getElementById('modal-img').classList.add('hidden');
             document.getElementById('play-overlay').classList.add('hidden');
-            
-            // Theater Mode Animation
             document.getElementById('info-section').classList.add('hidden'); 
-            
             const vidSec = document.getElementById('video-section');
             vidSec.classList.remove('md:w-[75%]');
             vidSec.classList.add('w-full'); 
-            
             document.getElementById('video-loader').classList.remove('hidden');
-            
             const frame = document.getElementById('video-frame');
             frame.src = `https://vidsrc.me/embed/movie/${currentMovieId}`;
             frame.classList.remove('hidden');
